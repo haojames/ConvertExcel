@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GENTOOL", "GENTOOL\GENTOOL.csproj", "{FFD03B6E-04DB-49FE-A71C-86754F0E2FEC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FFD03B6E-04DB-49FE-A71C-86754F0E2FEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFD03B6E-04DB-49FE-A71C-86754F0E2FEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFD03B6E-04DB-49FE-A71C-86754F0E2FEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFD03B6E-04DB-49FE-A71C-86754F0E2FEC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FAEB3861-C9E3-4798-92E4-008386ED5373}
+	EndGlobalSection
+EndGlobal
