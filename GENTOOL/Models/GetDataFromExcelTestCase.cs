@@ -23,30 +23,16 @@ namespace GENTOOL.Models
 {
     public class GetDataFromExcelTestCase : DatabaseFunction
     {
-        #region function of coresi and dbc
-        //string RequestResponseReg = "RequestResponse\\((.*)[ ]*,[ ]*(.*)[ ]*,[ ]*(.*)\\)";
-        string Checking_Configuration_Req = "Checking_Configuration\\((.*)[ ]*,[ ]*(.*)[ ]*,[ ]*(.*)[ ]*,[ ]*(.*)\\)";    //SendDiagFrame(messageID,DLC,frame,deltaT)
-        //# tatecheck([message], [signal], [channel], [node], [value])
-        //# e.g. statecheck(Camera_Display_Status, HhBmCntSta, E_can, CSM, 0)
-        string statecheck_Reg = "statecheck[ ]*\\([ ]*([^ ]*?)[ ]*,[ ]*([^ ]*?)[ ]*,[ ]*([^ ]*?)[ ]*,[ ]*([^ ]*?)[ ]*,[ ]*([^ ]*?)[ ]*\\)";
-        string AvoidSignalValue_Req = "(AvoidSignalValue)\\s*\\(\\s*(.+)\\)";
-        //# WaitForSignalValue_Req = r'(WaitForSignalValue)\s?\(\s?(.+)\)'
-        string WaitForSignalValue_Req = "(WaitForSignalValue)\\s*\\(\\s*([\\w\\s,]+)\\)";
-        string DeactivateFunction_Req = "(DeactivateFunction)\\s*\\(\\s*(.+)\\)";
-        string ActivateFunction_Req = "(ActivateFunction)\\s*\\(\\s*(.+)\\)";
-        string TesterConfirm_Req = "(TesterConfirm)\\s*\\(\\s*(.+)\\)";
-        string TimeNowStart_Req = "TimeNowStart";
-        string TimeNowEnd_Req = "TimeNowEnd[ ]?\\([ ]?(.+), [ ]?(.+)\\)";  // min time, max time
-        string CheckSignalValueIsPermanentStart_Req = "(CheckSignalValueIsPermanentStart)\\s*\\(\\s*(.+)\\)";
-        string CheckSignalValueIsPermanentStop_Req = "(CheckSignalValueIsPermanentStop)\\s*\\(\\s*(.+)\\)";
-        string startVideo_Req = "(startVideo)\\(\\s*(.+)\\)";
-        string stopVideo_Req = "(stopVideo)\\s*\\(\\s*(.*)\\)";
-        string WaitForSignalValueOutsideRange_Req = "(WaitForSignalValueOutsideRange)\\s*\\(\\s*(.+)\\)";
-        string CheckSignalValueIsNotTaken_START_Req = "(CheckSignalValueIsNotTaken_START)\\s*\\(\\s*(.+)\\)";
-        string CheckSignalValueIsNotTaken_STOP_Req = "(CheckSignalValueIsNotTaken_STOP)\\s*\\(\\s*(.+)\\)";
-        string StartLoggingCANtrace_Req = "(StartLoggingCANtrace)\\s*\\(\\s*(.+)\\)";
-        string StopLoggingCANtrace_Req = "(StopLoggingCANtrace)\\s*\\(\\s*(.+)\\)";
-        string SendMsg_Req = "(SendMsg)\\s*\\(\\s*(.+)\\)";
+        #region
+        string COL_component_name = "XXX Component MDC Component COM Tests MDC DCOM Tests LabT_MDC_ERRMGR MDC Error Manager Tests  LabT_MDC_DCOM MDC_ERRMGR Labor Test Lane Deviation Warning LabT_ High Beam Assist".ToLower();
+        string COL_TC_ID = "ID id";
+        string COL_test_description = "test description Description";
+        string COL_test_Step = "test steps steps teststeps";
+        string COL_test_response = "test response";
+        string COL_teststep_keywords = "teststep keywords";
+        string COL_objectType = "objecttype object type object type object type Objecttype";
+        string COL_teststatus = "teststatus test status";
+        string COL_project = "Project project";
         #endregion
         public string _inputpath;
         public string _outputpath;
@@ -77,9 +63,49 @@ namespace GENTOOL.Models
             get { return _outputpath; }
             set { _outputpath = value; }
         }
+        public bool CheckData_COL_component(string data)
+        {
+            return COL_component_name.Contains(data);
 
-        //public object excelConvertXMLs { get; private set; }
+        }
+        public bool CheckData_COL_test_description(string data)
+        {
+            return COL_test_description.Contains(data);
 
+        }
+        public bool CheckData_COL_TC_ID(string data)
+        {
+            return COL_TC_ID.Contains(data);
+        }
+        //public bool CheckData_COL_test_description(string data)
+        //{
+        //    //return COL_test_description(data);
+        //}
+        public bool CheckData_COL_test_Step(string data)
+        {
+            return COL_test_Step.Contains(data);
+        }
+        public bool CheckData_COL_test_response(string data)
+        {
+            return COL_test_response.Contains(data);
+        }
+        public bool CheckData_COL_teststep_keywords(string data)
+        {
+            return String.Equals(COL_teststep_keywords, data);
+        }
+        public bool CheckData_COL_objectType(string data)
+        {
+            return COL_objectType.Contains(data);
+        }
+        public bool CheckData_COL_teststatus(string data)
+        {
+            return COL_teststatus.Contains(data);
+        }
+        //COL_project
+        public bool CheckData_COL_project(string data)
+        {
+            return COL_project.Contains(data);
+        }
         public GetDataFromExcelTestCase()
         {
             List<ExcelConvertXML> list = new List<ExcelConvertXML>();
@@ -105,43 +131,45 @@ namespace GENTOOL.Models
                         ExcelConvertXML rowdataindex = new ExcelConvertXML();
                         for (int colindex = 1; colindex <= colCount; colindex++)
                         {
-                            if (worksheet.Cells[1, colindex].Value.ToString() == "LabT_")
+                            if (CheckData_COL_component(worksheet.Cells[1, colindex].Value.ToString().ToLower()))
                             {
                                 rowdataindex._labT = worksheet.Cells[rowindex, colindex].Value?.ToString();
                             }
-
-                            if (worksheet.Cells[1, colindex].Value.ToString() == "ID")
+                            else if (CheckData_COL_TC_ID(worksheet.Cells[1, colindex].Value.ToString().ToLower()))
                             {
                                 rowdataindex._TC_ID = worksheet.Cells[rowindex, colindex].Value?.ToString();
                             }
-
-                            if (worksheet.Cells[1, colindex].Value.ToString() == "Test Description")
+                            else if (CheckData_COL_test_description(worksheet.Cells[1, colindex].Value.ToString().ToLower()))
                             {
                                 rowdataindex._Test_description = worksheet.Cells[rowindex, colindex].Value?.ToString();
                             }
-                            if (worksheet.Cells[1, colindex].Value.ToString() == "TestSteps")
+                            else if (CheckData_COL_test_Step(worksheet.Cells[1, colindex].Value.ToString().ToLower()))//CheckData_COL_test_Step(worksheet.Cells[1, colindex].Value.ToString().ToLower()))
                             {
                                 rowdataindex._Test_step = worksheet.Cells[rowindex, colindex].Value?.ToString();
                             }
-                            if (worksheet.Cells[1, colindex].Value.ToString() == "Project")
+                            else if (CheckData_COL_project(worksheet.Cells[1, colindex].Value.ToString().ToLower()))
                             {
                                 rowdataindex._Project = worksheet.Cells[rowindex, colindex].Value?.ToString();
                             }
-                            if (worksheet.Cells[1, colindex].Value.ToString() == "Test Response")
-                            {
-                                rowdataindex._Test_response = worksheet.Cells[rowindex, colindex].Value?.ToString();
-                            }
-                            if (worksheet.Cells[1, colindex].Value.ToString() == "Teststep keywords")
-                            {
-                                rowdataindex._Teststep_key = worksheet.Cells[rowindex, colindex].Value?.ToString();
-                            }
-                            if (worksheet.Cells[1, colindex].Value.ToString() == "TestStatus")
+                            else if (CheckData_COL_teststatus(worksheet.Cells[1, colindex].Value.ToString().ToLower()))
                             {
                                 rowdataindex._Test_status = worksheet.Cells[rowindex, colindex].Value?.ToString();
                             }
-                            if (worksheet.Cells[1, colindex].Value.ToString() == "ObjectType")
+                            else if (CheckData_COL_test_response(worksheet.Cells[1, colindex].Value.ToString().ToLower()))
+                            {
+                                rowdataindex._Test_response = worksheet.Cells[rowindex, colindex].Value?.ToString();
+                            }
+                            else if (CheckData_COL_objectType(worksheet.Cells[1, colindex].Value.ToString().ToLower()))
                             {
                                 rowdataindex._Object_type = worksheet.Cells[rowindex, colindex].Value?.ToString();
+                            }
+                            else if (CheckData_COL_teststep_keywords(worksheet.Cells[1, colindex].Value.ToString().ToLower()))
+                            {
+                                rowdataindex._Teststep_key = worksheet.Cells[rowindex, colindex].Value?.ToString();
+                            }
+                            else
+                            {
+
                             }
                         }
                         list.Add(rowdataindex);
@@ -303,8 +331,7 @@ namespace GENTOOL.Models
                             string name = DeleteRegex(_listdata_testkeywor[i].ToString());
                             string title = (i + 1) + "- " + _listdata_teststep[i].ToString();
                             string ident = _listdata_testreponse[i].ToString();
-                            string variants_auto = "Automated";
-                            group2.AppendChild(group2.OwnerDocument.ImportNode(function.TimeNowStart(name, title, ident, variants_auto), true));
+                            group2.AppendChild(group2.OwnerDocument.ImportNode(function.TimeNowStart(name, title, ident), true));
                         }
                         else if (_listdata_testkeywor[i].Contains("wait") && databasefunction.Contains("wait"))
                         {
@@ -315,7 +342,7 @@ namespace GENTOOL.Models
                             string name = DeleteRegex(GetStringFromWait(_listdata_testkeywor[i].ToString()));
                             group2.AppendChild(group2.OwnerDocument.ImportNode(function.wait(title, ident, name, time), true));
                         }
-                        else if(_listdata_testkeywor[i].Contains("envvar") && databasefunction.Contains("envvar"))
+                        else if (_listdata_testkeywor[i].Contains("envvar") && databasefunction.Contains("envvar"))
                         {
                             string title = (i + 1) + "- " + _listdata_teststep[i].ToString();
                             string ident = _listdata_testreponse[i].ToString();
@@ -327,7 +354,7 @@ namespace GENTOOL.Models
                             string timeout = Gettimeout(value);
                             group2.AppendChild(group2.OwnerDocument.ImportNode(function.envvar(title, ident, namedbc, statesignal, timeout, name_function), true));
                         }
-                        else if(_listdata_testkeywor[i].Contains("CheckSignalValueIsPermanentStop") && databasefunction.Contains("CheckSignalValueIsPermanentStop"))
+                        else if (_listdata_testkeywor[i].Contains("CheckSignalValueIsPermanentStop") && databasefunction.Contains("CheckSignalValueIsPermanentStop"))
                         {
                             string title = (i + 1) + "- " + _listdata_teststep[i].ToString();
                             string ident = _listdata_testreponse[i].ToString();
@@ -338,13 +365,13 @@ namespace GENTOOL.Models
                             string name_type = valueinvalues.ElementAt(1);
                             string namedbc = valueinvalues.ElementAt(2);
                             group2.AppendChild(group2.OwnerDocument.ImportNode(function.CheckSignalValueIsPermanentStop(name_function, title, ident, name_type, variable, namedbc), true));
-                        }    
+                        }
                         else
                         {
                             XmlElement testcase = xmlDocument.CreateElement("testcase");
                             testcase.SetAttribute("title", (i + 1) + "- " + "Not yet ");
                             group2.AppendChild(testcase);
-                        }    
+                        }
                     }
                 }
             }
@@ -359,7 +386,6 @@ namespace GENTOOL.Models
             string a = xmlDocument.GetOuterXml();
             File.AppendAllText(pathfile, a + Environment.NewLine);
         }
-
         #region wait(n)
         public string GetNumberFromWait(string input)
         {
@@ -410,7 +436,7 @@ namespace GENTOOL.Models
             string value;
             int startindex = input.IndexOf('(');
             int endindex = input.IndexOf(')');
-            value = input.Substring(startindex + 1, endindex - startindex -1);
+            value = input.Substring(startindex + 1, endindex - startindex - 1);
             return value;
         }
 
